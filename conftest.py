@@ -1,5 +1,3 @@
-import json
-
 import pytest
 
 from methods.courier_methods import CourierMethods
@@ -31,6 +29,15 @@ def random_login_pass():
 def random_courier_data():
     courier_body = generate_courier_data()
     yield courier_body
+
+@pytest.fixture
+def cleanup_courier():
+    courier_body = generate_courier_data()
+    yield courier_body
+
+    courier_id = CourierMethods.get_courier_id(courier_body)
+    CourierMethods.delete_courier(courier_id)
+
 
 @pytest.fixture
 def cleanup_order():

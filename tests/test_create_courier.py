@@ -1,16 +1,17 @@
 import allure
 
+from conftest import cleanup_courier
 from methods.courier_methods import CourierMethods
 from data import TextResponse
 
 class TestCreateCourier:
 
     @allure.title('Проверка успешного создания курьера')
-    def test_successful_create_courier_code_201(self, new_courier):
-        courier_status_code = new_courier[1]
-        courier_response = new_courier[2]
-        assert (courier_status_code == 201
-                and courier_response == TextResponse.successful_create_courier)
+    def test_successful_create_courier_code_201(self, cleanup_courier):
+        payload = cleanup_courier
+        courier = CourierMethods.create_courier(payload)
+        assert (courier.status_code == 201
+                and courier.text == TextResponse.successful_create_courier)
 
     @allure.title('Проверка ошибки при создании курьера без логина')
     def test_create_courier_with_no_login_code_400(self, random_courier_data):
